@@ -23,17 +23,19 @@ int main(){
 
 //Movimentação do robô para a posição informada
 int moveRobo(int moveX, int moveY){
-    //Validação 1: Limites da matriz
+    /*Validação 1: Limites da matriz - 
+    Verificar se o robô está dentro do mundo, evitando coordenas além do tamanho da matriz
+    */
     if (moveX < 0 || moveX >= TAMANHO || moveY < 0 || moveY >= TAMANHO){
         return 0;
     }
 
-    //Validação 2: Obstáculo
-    if (mundo[moveY][moveY] == '*'){
+    //Validação 2: Obstáculo - verificar quando o robô encontra o obstáculo
+    if (mundo[moveX][moveY] == '*'){
         return 0;
     }
 
-    //Validação 3: Adjacência (garante que o Robô não se mova nadiagonal ou pule casa)
+    //Validação 3: Adjacência (garante que o Robô não se mova na diagonal ou pule casas)
     int distanciaX = abs(moveX - posicaoRoboX);
     int distanciaY = abs(moveY - posicaoRoboY);
     if ((distanciaX + distanciaY) != 1){
