@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// pablo boboca 
+
 #define TAMANHO 20
 
 //Variáveis globais para controle exclusivo pelas funções obrigatórias
