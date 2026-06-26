@@ -10,6 +10,9 @@ char mundo[TAMANHO][TAMANHO];
 int posicaoRoboX = 19, posicaoRoboY = 19; //Linha X, Coluna Y
 
 //Protótipos das funções abrigatórias
+
+int getRoboPositionY();
+int getRoboPositionx();
 int moveRobo(int moveX, int moveY);
 
 
@@ -20,6 +23,17 @@ int main(){
 
     //Carregar o arquivo texto (mundo)
     carregarMundo(mundo);
+}
+
+
+
+// Retorna a Linha atual do robô
+int getRoboPositionX(){
+    return posicaoRoboX;
+}
+
+int getRoboPositionY(){
+    return posicaoRoboY;
 }
 
 
