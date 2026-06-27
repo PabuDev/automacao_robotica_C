@@ -12,17 +12,35 @@ int posicaoRoboX = 19, posicaoRoboY = 19; //Linha X, Coluna Y
 //Protótipos das funções abrigatórias
 
 int getRoboPositionY();
-int getRoboPositionx();
+int getRoboPositionx(); 
 int moveRobo(int moveX, int moveY);
 
 
 
 int main(){
     int rodada = 1;
-    int encotrouPremio = 0;
+    int encontrouPremio = 0;
 
     //Carregar o arquivo texto (mundo)
     carregarMundo(mundo);
+
+    printf(" === SIMULACAO DO ROBO === \n\n");
+
+    while(rodada <= 60){
+
+        int moveAtualX = getRoboPositionX();
+        int moveAtualY = getRoboPositionY();
+
+        //Determina o próximo movimento
+        int proximoMoveX = moveAtualX;
+        int proximoMoveY = moveAtualY;
+
+        // Movimento para cima
+        if (moveAtualX > 0 && mundo[moveAtualX - 1][moveAtualY] != "*"){
+            proximoMoveX = moveAtualX - 1;
+        }
+
+    }
 }
 
 
