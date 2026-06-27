@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Professores: Inês e Jorge
+// pablo boboca
 
 #define TAMANHO 20
 
