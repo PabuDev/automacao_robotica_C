@@ -11,10 +11,16 @@ int posicaoRoboX = 19, posicaoRoboY = 19; //Linha X, Coluna Y
 
 //Protótipos das funções abrigatórias
 
+void carregarMundo(char mundo[TAMANHO][TAMANHO]);
+void imprimirMundo(char mundo[TAMANHO][TAMANHO], int roboX, int roboY);
 int getRoboPositionY();
 int getRoboPositionx(); 
 int moveRobo(int moveX, int moveY);
 
+//Variável para mostrar se o robô se movimentou ou não
+int movimentoFeito();
+//Colocar um provável if else na parte que for printar que ele conseguiu andar ou não.
+//Nomear um novo int, ex: int mov = movimentoFeito(); pra poder se encaixar no valor da variável e ir atualizando, por isso cria-se uma nova.
 
 
 int main(){
