@@ -41,11 +41,35 @@ int main(){
         int proximoMoveX = moveAtualX;
         int proximoMoveY = moveAtualY;
 
-        // Movimento para cima
+        // Tentar fazer o movimento para cima
         if (moveAtualX > 0 && mundo[moveAtualX - 1][moveAtualY] != "*"){
             proximoMoveX = moveAtualX - 1;
         }
+        //Tentar o movimento para a esquerda
+        else if (moveAtualY > 0 && mundo[moveAtualX][moveAtualY - 1] != "*" ){
+                proximoMoveY = moveAtualY - 1;
+            }
+        //Tentar o movimento para a direita
+        else if(moveAtualY < TAMANHO - 1 && mundo[moveAtualX][moveAtualY + 1] != "*"){
+                proximoMoveY = moveAtualY + 1;
+        }
+        //Tentar o movimento para baixo
+        else if (moveAtualX < TAMANHO - 1 && mundo[moveAtualX + 1][moveAtualY] != "*"){
+                proximoMoveX = moveAtualX + 1;
+        }
+        //Executa a tentativa do movimento
+        int sucesso = moveRobo(proximoMoveX, proximoMoveY);
 
+
+
+        //Verifica se o robô alcançou o prêmio na posição (0,0)
+        if (getRoboPositionX() == 0 && getRoboPositionY() == 0){
+            encontrouPremio = 1;
+            printf("PARABENS, O ROBO MILA ACANCOU O PREMIO!!!");
+            break;
+        }
+
+        rodada++; 
     }
 }
 
