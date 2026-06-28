@@ -65,11 +65,16 @@ int main(){
         //Verifica se o robô alcançou o prêmio na posição (0,0)
         if (getRoboPositionX() == 0 && getRoboPositionY() == 0){
             encontrouPremio = 1;
-            printf("PARABENS, O ROBO MILA ACANCOU O PREMIO!!!");
             break;
         }
 
         rodada++; 
+    }
+    //Para exibir a mensagem final do jogo
+    if(encontrouPremio){
+        printf("\nPARABENS, O ROBO MILA ACANCOU O PREMIO!!!");
+    }else {
+        printf("\nFIM DE JOGO!! O ROBO NAO CONSEGUIU O PREMIO!!");
     }
 }
 
