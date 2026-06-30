@@ -34,6 +34,7 @@ int main(){
 
     //Carregar o arquivo texto (mundo)
     carregarMundo(mundo);
+    inicializarMemoria();
 
     printf(" === SIMULACAO DO ROBO === \n\n");
 
@@ -45,22 +46,27 @@ int main(){
         //Determina o próximo movimento
         int proximoMoveX = moveAtualX;
         int proximoMoveY = moveAtualY;
+        int tentativaValida = 0;
 
         // Tentar fazer o movimento para cima
         if (moveAtualX > 0 && mundo[moveAtualX - 1][moveAtualY] != "*"){
             proximoMoveX = moveAtualX - 1;
+            tentativaValida = 1;
         }
         //Tentar o movimento para a esquerda
-        else if (moveAtualY > 0 && mundo[moveAtualX][moveAtualY - 1] != "*" ){
+        else if (moveAtualY > 0 && mapaMemoriaRobo[moveAtualX][moveAtualY - 1] != "*" ){
                 proximoMoveY = moveAtualY - 1;
+                tentativaValida = 1;
             }
         //Tentar o movimento para a direita
-        else if(moveAtualY < TAMANHO - 1 && mundo[moveAtualX][moveAtualY + 1] != "*"){
+        else if(moveAtualY < TAMANHO - 1 && mapaMemoriaRobo[moveAtualX][moveAtualY + 1] != "*"){
                 proximoMoveY = moveAtualY + 1;
+                tentativaValida = 1;
         }
         //Tentar o movimento para baixo
-        else if (moveAtualX < TAMANHO - 1 && mundo[moveAtualX + 1][moveAtualY] != "*"){
+        else if (moveAtualX < TAMANHO - 1 && mapaMemoriaRobo[moveAtualX + 1][moveAtualY] != "*"){
                 proximoMoveX = moveAtualX + 1;
+                tentativaValida = 1;
         }
         //Executa a tentativa do movimento
         int sucesso = moveRobo(proximoMoveX, proximoMoveY);
