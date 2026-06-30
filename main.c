@@ -7,6 +7,7 @@
 
 //Variáveis globais para controle exclusivo pelas funções obrigatórias
 char mundo[TAMANHO][TAMANHO];
+char mapaMemoriaRobo[TAMANHO][TAMANHO]; //"Memória" de Mila
 int posicaoRoboX = 19, posicaoRoboY = 19; //Linha X, Coluna Y
 
 //Protótipos das funções abrigatórias
@@ -16,6 +17,10 @@ void imprimirMundo(char mundo[TAMANHO][TAMANHO], int roboX, int roboY);
 int getRoboPositionY();
 int getRoboPositionx(); 
 int moveRobo(int moveX, int moveY);
+
+//Funções extras
+void inicializarMemoria();
+void imprimirMemoria();
 
 //Variável para mostrar se o robô se movimentou ou não
 int movimentoFeito();
@@ -59,6 +64,14 @@ int main(){
         }
         //Executa a tentativa do movimento
         int sucesso = moveRobo(proximoMoveX, proximoMoveY);
+        //Aprendizagem do robô
+        if(sucesso == 1){
+            //Se mmoveu com sucesso, o robô aprende que o caminho está livre
+            mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '0';
+        }else{
+            //Se o movimento falhou, o robô aprende que o caminho tem obstáculo
+            mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '1';
+        }
 
 
 
@@ -89,6 +102,24 @@ int getRoboPositionY(){
     return posicaoRoboY;
 }
 
+//Função para zerar a memória no início do jogo
+void inicializarMemoria(){
+    for(int i = 0; i < TAMANHO; i++){
+        for(int j = 0; j < TAMANHO; j++){
+            mapaMemoriaRobo[i][j] = '.'; //Não testado
+        }
+    }
+}
+
+//Imprimindo a memória do robô Mila
+void imprimirMemoria(){
+    printf("\n === MEMORIA DE APRENDIZADO DO ROBO === \n");
+    for(int i = 0; i < TAMANHO; i++){
+        for(int j = 0; j < TAMANHO; j++){
+            printf("%c", mapaMemoriaRobo[i][j]);
+        }
+    }printf("\n");
+}
 
 //Movimentação do robô para a posição informada
 int moveRobo(int moveX, int moveY){
