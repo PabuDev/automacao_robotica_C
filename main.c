@@ -49,7 +49,7 @@ int main(){
         int tentativaValida = 0;
 
         // Tentar fazer o movimento para cima
-        if (moveAtualX > 0 && mundo[moveAtualX - 1][moveAtualY] != "*"){
+        if (moveAtualX > 0 && mapaMemoriaRobo[moveAtualX - 1][moveAtualY] != "*"){
             proximoMoveX = moveAtualX - 1;
             tentativaValida = 1;
         }
@@ -68,18 +68,30 @@ int main(){
                 proximoMoveX = moveAtualX + 1;
                 tentativaValida = 1;
         }
-        //Executa a tentativa do movimento
-        int sucesso = moveRobo(proximoMoveX, proximoMoveY);
-        //Aprendizagem do robô
-        if(sucesso == 1){
-            //Se mmoveu com sucesso, o robô aprende que o caminho está livre
-            mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '0';
+
+        //Se o robô encontrou uma direção teoricamente viável
+        if(tentativaValida){
+            //Executa a tentativa do movimento
+            int sucesso = moveRobo(proximoMoveX, proximoMoveY);
+            //Aprendizagem do robô
+            if(sucesso == 1){
+                //Se mmoveu com sucesso, o robô aprende que o caminho está livre
+                mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '0';
+                printf("Rodada %d: Moveu com sucesso para (%d, %d)", rodada, proximoMoveX, proximoMoveY);
+            }else{
+                //Se o movimento falhou, o robô aprende que o caminho tem obstáculo
+                mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '1';
+                printf("Rodada %d: Bateu na parede em (%d, %d)", rodada, proximoMoveX, proximoMoveY);
+            }
         }else{
-            //Se o movimento falhou, o robô aprende que o caminho tem obstáculo
-            mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '1';
+            //Caso o robô se cerque por obstáculos
+            printf("Rodada %d: Cercado por paredes (%d, %d)", rodada, proximoMoveX, proximoMoveY);
         }
 
-
+        //Exibe o estado visual da simulação 
+        imprimirMundo(mundo, getRoboPositionX(), getRoboPositionY());
+        imprimirMemoria();
+        printf("\n=================================================\n");
 
         //Verifica se o robô alcançou o prêmio na posição (0,0)
         if (getRoboPositionX() == 0 && getRoboPositionY() == 0){
@@ -95,18 +107,16 @@ int main(){
     }else {
         printf("\nFIM DE JOGO!! O ROBO NAO CONSEGUIU O PREMIO!!");
     }
+
+    return 0;
 }
 
 
 
 // Retorna a Linha atual do robô
-int getRoboPositionX(){
-    return posicaoRoboX;
-}
+int getRoboPositionX() { return posicaoRoboX; }
 
-int getRoboPositionY(){
-    return posicaoRoboY;
-}
+int getRoboPositionY() { return posicaoRoboY; }
 
 //Função para zerar a memória no início do jogo
 void inicializarMemoria(){
