@@ -121,14 +121,70 @@ int main(){
                 tentativaValida = 1;
         }
 
+        // Segunda prioridade do robô
+        if(!tentativaValida){
+            // Tentar fazer o movimento para cima
+            if (moveAtualX > 0 && mapaMemoriaRobo[moveAtualX - 1][moveAtualY] == '0'){
+                proximoMoveX = moveAtualX - 1;
+                tentativaValida = 1;
+            }
+            // Tentar o movimento para a esquerda
+            else if (moveAtualY > 0 && mapaMemoriaRobo[moveAtualX][moveAtualY - 1] == '0'){
+                proximoMoveY = moveAtualY - 1;
+                tentativaValida = 1;
+            }
+            // Tentar o movimento para a direita
+            else if(moveAtualY < TAMANHO - 1 && mapaMemoriaRobo[moveAtualX][moveAtualY + 1] == '0'){
+                proximoMoveY = moveAtualY + 1;
+                tentativaValida = 1;
+            }
+            // Tentar o movimento para baixo
+            else if (moveAtualX < TAMANHO - 1 && mapaMemoriaRobo[moveAtualX + 1][moveAtualY] == '0'){
+                proximoMoveX = moveAtualX + 1;
+                tentativaValida = 1;
+            }
+    
+        }
+
+        // Terceira prioridade do robô
+        if(!tentativaValida){
+            // Tentar fazer o movimento para cima
+            if (moveAtualX > 0 && mapaMemoriaRobo[moveAtualX - 1][moveAtualY] == '2'){
+                proximoMoveX = moveAtualX - 1;
+                tentativaValida = 1;
+            }
+            // Tentar o movimento para a esquerda
+            else if (moveAtualY > 0 && mapaMemoriaRobo[moveAtualX][moveAtualY - 1] == '2'){
+                proximoMoveY = moveAtualY - 1;
+                tentativaValida = 1;
+            }
+            // Tentar o movimento para a direita
+            else if(moveAtualY < TAMANHO - 1 && mapaMemoriaRobo[moveAtualX][moveAtualY + 1] == '2'){
+                proximoMoveY = moveAtualY + 1;
+                tentativaValida = 1;
+            }
+            // Tentar o movimento para baixo
+            else if (moveAtualX < TAMANHO - 1 && mapaMemoriaRobo[moveAtualX + 1][moveAtualY] == '2'){
+                proximoMoveX = moveAtualX + 1;
+                tentativaValida = 1;
+            }
+    
+        }
+    
+
         // Se o robô encontrou uma direção teoricamente viável 
         if(tentativaValida){
             // Executa a tentativa do movimento
             int sucesso = moveRobo(proximoMoveX, proximoMoveY);
             // Aprendizagem do robô
-            if(sucesso == 1){
-                // Se mmoveu com sucesso, o robô aprende que o caminho está livre
-                mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '0';
+            if(sucesso){
+                // Deixe uma pegada na casa onde estava antes de mexer
+                mapaMemoriaRobo[moveAtualX][moveAtualY] = '2';
+                // ainda a acresentar
+                if(mapaMemoriaRobo[proximoMoveX][proximoMoveY] == '.'){
+                    mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '0';
+                }
+                // Se moveu com sucesso, o robô aprende que o caminho está livre
                 printf("Rodada %d: Moveu com sucesso para (%d, %d)", rodada, proximoMoveX, proximoMoveY);
             }else{
                 // Se o movimento falhou, o robô aprende que o caminho tem obstáculo
