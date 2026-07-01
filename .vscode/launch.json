@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": true,
       "cwd": "c:/Users/sillv/OneDrive/Documentos/GitHub/automacao_robotica_C",
-      "program": "c:/Users/sillv/OneDrive/Documentos/GitHub/automacao_robotica_C/build/Debug/outDebug",
+      "program": "c:/Users/sillv/OneDrive/Documentos/GitHub/automacao_robotica_C/main.exe",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

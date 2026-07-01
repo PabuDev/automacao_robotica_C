@@ -26,7 +26,7 @@ int moveRobo(int moveX, int moveY);
 
 // Funções extras 
 void inicializarMemoria();
-void imprimirMemoria();
+//void imprimirMemoria();
 
 // Variável para mostrar se o robô se movimentou ou não
 void imprimirEstatisticas(int totalRodadas, int colisoes);
@@ -143,7 +143,7 @@ int main(){
 
         // Exibe o estado visual da simulação 
         imprimirMundo(mundo, getRoboPositionX(), getRoboPositionY());
-        imprimirMemoria();
+        //imprimirMemoria();
         printf("\n=================================================\n");
 
 
@@ -216,11 +216,11 @@ void inicializarMemoria(){
         for(int j = 0; j < TAMANHO; j++){
             mapaMemoriaRobo[i][j] = '.'; // Não testado
         }
-    }
+    }printf("\n");
 }
 
 // Imprimindo a memória do robô Mila
-void imprimirMemoria(){
+/*void imprimirMemoria(){
     printf("\n === MEMORIA DE APRENDIZADO DO ROBO === \n");
     for(int i = 0; i < TAMANHO; i++){
         for(int j = 0; j < TAMANHO; j++){
@@ -228,7 +228,7 @@ void imprimirMemoria(){
         }
     }printf("\n");
 }
-
+*/
 // Movimentação do robô para a posição informada
 int moveRobo(int moveX, int moveY){
     /*Validação 1: Limites da matriz - 
