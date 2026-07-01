@@ -83,6 +83,7 @@ int main(){
                 //Se o movimento falhou, o robô aprende que o caminho tem obstáculo
                 mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '1';
                 printf("Rodada %d: Bateu na parede em (%d, %d)", rodada, proximoMoveX, proximoMoveY);
+                colisoes++;
             }
         }else{
             //Caso o robô se cerque por obstáculos
