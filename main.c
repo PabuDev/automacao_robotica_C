@@ -29,6 +29,8 @@ void inicializarMemoria();
 void imprimirMemoria();
 
 // Variável para mostrar se o robô se movimentou ou não
+void imprimirEstatisticas(int totalRodadas, int colisoes);
+//Variável para mostrar se o robô se movimentou ou não
 int movimentoFeito();
 //Colocar um provável if else na parte que for printar que ele conseguiu andar ou não.
 /*Nomear um novo int, ex: int mov = movimentoFeito(); pra poder se encaixar no valor da variável e 
@@ -38,6 +40,7 @@ ir atualizando, por isso cria-se uma nova.
 int main(){
     int rodada = 1;
     int encontrouPremio = 0;
+    int colisoes = 0; //Contador para a estatística
 
     if (!carregarMundo(mundo)){
     printf("Falha ao carregar o mundo, tente novamente!\n");
@@ -111,6 +114,7 @@ int main(){
                 // Se o movimento falhou, o robô aprende que o caminho tem obstáculo
                 mapaMemoriaRobo[proximoMoveX][proximoMoveY] = '1';
                 printf("Rodada %d: Bateu na parede em (%d, %d)", rodada, proximoMoveX, proximoMoveY);
+                colisoes++;
             }
         }else{
             // Caso o robô se cerque por obstáculos 
@@ -138,11 +142,47 @@ int main(){
         printf("\nPARABENS, O ROBO MILA ACANCOU O PREMIO!!!");
     }else {
         printf("\nFIM DE JOGO!! O ROBO NAO CONSEGUIU O PREMIO!!");
+        rodada--; //Para ajustar o contador para exibir 40 rodadas
     }
+    //Chama a função de relatório da estatística
+    imprimirEstatisticas(rodada, colisoes);
 
     return 0;
 }
 
+
+
+//Função de Estatísticas
+void imprimirEstatisticas(int totalRodadas, int colisoes){
+    int descobertas = 0;
+    int barreiras = 0;
+
+    //Varrer o Mapa Memória para contar o que o robô aprendeu
+    for(int i = 0; i < TAMANHO; i++){
+        for(int j = 0; j < TAMANHO; j++){
+            if(mapaMemoriaRobo[i][j] == '0'){
+                descobertas++;
+            }
+            if(mapaMemoriaRobo[i][j] == '1'){
+                descobertas++;
+                barreiras++;
+            }
+        }
+    }
+
+    //Calcular a porcentagem do labirinto total mapeado
+    float porcentagem = ((float)descobertas / (TAMANHO * TAMANHO)) * 100;
+
+    printf("\n=======================================");
+    printf("\n       RELATORIO DE EFICIENCIA         ");
+    printf("\n=======================================");
+    printf("\nTotal de rodadas gastas: %d de 40", totalRodadas);
+    printf("\nColisoes/Erros registrados: %d", colisoes);
+    printf("\nCasas descobertas (Livres): %d", descobertas - barreiras);
+    printf("\nObstaculos catalogados: %d", barreiras);
+    printf("\nArea total explorada: %d de %d casas (%.2f%%)", descobertas, TAMANHO * TAMANHO, porcentagem);
+    printf("\n=======================================\n");
+}
 
 
 // Retorna a Linha atual do robô
