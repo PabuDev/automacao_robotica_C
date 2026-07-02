@@ -92,6 +92,7 @@ int main(){
         }
 
         // Prioridade 2: se não houver casa desconhecida, andar para uma casa livre já conhecida
+        // Este bloco tenta evitar o retorno imediato à casa anterior e impedir o ciclo em becos sem saída.
         if (!tentativaValida) {
             if (moveAtualX > 0 && mapaMemoriaFrontalRobo[moveAtualX - 1][moveAtualY] == '0'
                 && !(moveAtualX - 1 == ultimaPosicaoRoboX && moveAtualY == ultimaPosicaoRoboY)
