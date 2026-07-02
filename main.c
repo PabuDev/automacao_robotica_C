@@ -16,6 +16,7 @@ char mundo[TAMANHO][TAMANHO];
 char mapaMemoriaFrontalRobo[TAMANHO][TAMANHO]; // "Memória" Frontal de LUZITA
 int mapaMemoriaTraseiraRobo[TAMANHO][TAMANHO]; //"Memória" Traseira de LUZITA
 int posicaoRoboX = 19, posicaoRoboY = 19; // Linha X, Coluna Y
+int ultimaPosicaoRoboX = -1, ultimaPosicaoRoboY = -1;
 
 // Protótipos das funções obrigatórias 
 
@@ -39,44 +40,6 @@ int movimentoFeito();
 ir atualizando, por isso cria-se uma nova.
 */
 
-int carregarMundo(char mundo[TAMANHO][TAMANHO]){
-    FILE *arquivo = fopen("mundo.txt", "r");
-
-    if (arquivo == NULL){
-        return 0;
-    }
-
-    for (int i = 0; i < TAMANHO; i++){
-        for (int j = 0; j < TAMANHO; j++){
-            if (fscanf(arquivo, " %c", &mundo[i][j]) != 1){
-                fclose(arquivo);
-                return 0;
-            }
-
-            if (mundo[i][j] != '_' && mundo[i][j] != '*'){
-                fclose(arquivo);
-                return 0;
-            }
-        }
-    }
-
-    fclose(arquivo);
-    return 1;
-}
-
-void imprimirMundo(char mundo[TAMANHO][TAMANHO], int roboX, int roboY){
-    printf("\n=== MAPA ===\n");
-    for(int i = 0; i < TAMANHO; i++){
-        for(int j = 0; j < TAMANHO; j++){
-            if(i == roboX && j == roboY){
-                printf("R");
-            } else {
-                printf("%c", mundo[i][j]);
-            }
-        }
-        printf("\n");
-    }
-}
 
 int main(){
     int rodada = 1;
@@ -102,89 +65,66 @@ int main(){
         int proximoMoveY = moveAtualY;
         int tentativaValida = 0;
 
-        //Primeira prioridade: Tentar fazer o movimento explorando o desconhecido
-        if (moveAtualX > 0 && mapaMemoriaFrontalRobo[moveAtualX - 1][moveAtualY] != '1'){
+        // Prioridade 1: explorar casas ainda desconhecidas, sem voltar para a casa de onde veio
+        if (moveAtualX > 0 && mapaMemoriaFrontalRobo[moveAtualX - 1][moveAtualY] == '.'
+            && !(moveAtualX - 1 == ultimaPosicaoRoboX && moveAtualY == ultimaPosicaoRoboY)
+            && mapaMemoriaTraseiraRobo[moveAtualX - 1][moveAtualY] != 2) {
             proximoMoveX = moveAtualX - 1;
             tentativaValida = 1;
         }
-        // Tentar o movimento para a esquerda
-        else if (moveAtualY > 0 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY - 1] != '1' ){
-                proximoMoveY = moveAtualY - 1;
-                tentativaValida = 1;
-            }
-        // Tentar o movimento para a direita
-        else if(moveAtualY < TAMANHO - 1 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY + 1] != '1'){
-                proximoMoveY = moveAtualY + 1;
-                tentativaValida = 1;
+        else if (moveAtualY > 0 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY - 1] == '.'
+            && !(moveAtualX == ultimaPosicaoRoboX && moveAtualY - 1 == ultimaPosicaoRoboY)
+            && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY - 1] != 2) {
+            proximoMoveY = moveAtualY - 1;
+            tentativaValida = 1;
         }
-        // Tentar o movimento para baixo
-        else if (moveAtualX < TAMANHO - 1 && mapaMemoriaFrontalRobo[moveAtualX + 1][moveAtualY] != '1'){
-                proximoMoveX = moveAtualX + 1;
-                tentativaValida = 1;
+        else if (moveAtualY < TAMANHO - 1 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY + 1] == '.'
+            && !(moveAtualX == ultimaPosicaoRoboX && moveAtualY + 1 == ultimaPosicaoRoboY)
+            && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY + 1] != 2) {
+            proximoMoveY = moveAtualY + 1;
+            tentativaValida = 1;
+        }
+        else if (moveAtualX < TAMANHO - 1 && mapaMemoriaFrontalRobo[moveAtualX + 1][moveAtualY] == '.'
+            && !(moveAtualX + 1 == ultimaPosicaoRoboX && moveAtualY == ultimaPosicaoRoboY)
+            && mapaMemoriaTraseiraRobo[moveAtualX + 1][moveAtualY] != 2) {
+            proximoMoveX = moveAtualX + 1;
+            tentativaValida = 1;
         }
 
-        /*
-        SEGUNDA PRIORIDADE - CAMINHAR POR ÁREA LIVRE NÃO VISITADA
-        Se já conhece o terreno como livre ('0') e o mapaVisitas diz que NUNCA pisou (0)
-        */
-        if(!tentativaValida){
-            // Tentar fazer o movimento para cima
-            if (moveAtualX > 0 && mapaMemoriaFrontalRobo[moveAtualX - 1][moveAtualY] == '0' 
-                && mapaMemoriaTraseiraRobo[moveAtualX - 1][moveAtualY] == 0){
+        // Prioridade 2: se não houver casa desconhecida, andar para uma casa livre já conhecida
+        if (!tentativaValida) {
+            if (moveAtualX > 0 && mapaMemoriaFrontalRobo[moveAtualX - 1][moveAtualY] == '0'
+                && !(moveAtualX - 1 == ultimaPosicaoRoboX && moveAtualY == ultimaPosicaoRoboY)
+                && mapaMemoriaTraseiraRobo[moveAtualX - 1][moveAtualY] != 2) {
                 proximoMoveX = moveAtualX - 1;
                 tentativaValida = 1;
             }
-            // Tentar o movimento para a esquerda
-            else if (moveAtualY > 0 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY - 1] == '0' 
-                && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY - 1] == 0){
+            else if (moveAtualY > 0 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY - 1] == '0'
+                && !(moveAtualX == ultimaPosicaoRoboX && moveAtualY - 1 == ultimaPosicaoRoboY)
+                && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY - 1] != 2) {
                 proximoMoveY = moveAtualY - 1;
                 tentativaValida = 1;
             }
-            // Tentar o movimento para a direita
-            else if(moveAtualY < TAMANHO - 1 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY + 1] == '0' 
-            && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY + 1] == 0){
+            else if (moveAtualY < TAMANHO - 1 && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY + 1] == '0'
+                && !(moveAtualX == ultimaPosicaoRoboX && moveAtualY + 1 == ultimaPosicaoRoboY)
+                && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY + 1] != 2) {
                 proximoMoveY = moveAtualY + 1;
                 tentativaValida = 1;
             }
-            // Tentar o movimento para baixo
             else if (moveAtualX < TAMANHO - 1 && mapaMemoriaFrontalRobo[moveAtualX + 1][moveAtualY] == '0'
-            && mapaMemoriaTraseiraRobo[moveAtualX + 1][moveAtualY] == 0){
+                && !(moveAtualX + 1 == ultimaPosicaoRoboX && moveAtualY == ultimaPosicaoRoboY)
+                && mapaMemoriaTraseiraRobo[moveAtualX + 1][moveAtualY] != 2) {
                 proximoMoveX = moveAtualX + 1;
                 tentativaValida = 1;
             }
-    
         }
-        /*
-        ÚLTIMA OPÇÃO - RETROCEDER POR CAMINHO JÁ VISITADO
-        Se estiver encurralado por barreiras ou becos, ele aceita voltar pisando onde mapaVisitas == 2
-        */
-        // Terceira prioridade do robô
-        if(!tentativaValida){
-            // Tentar fazer o movimento para cima
-            if (moveAtualX > 0 && mapaMemoriaTraseiraRobo[moveAtualX - 1][moveAtualY] == 2
-                && mapaMemoriaFrontalRobo[moveAtualX - 1][moveAtualY] == '2'){
-                proximoMoveX = moveAtualX - 1;
-                tentativaValida = 1;
-            }
-            // Tentar o movimento para a esquerda
-            else if (moveAtualY > 0 && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY - 1] == 2
-                && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY - 1] == '1'){
-                proximoMoveY = moveAtualY - 1;
-                tentativaValida = 1;
-            }
-            // Tentar o movimento para a direita
-            else if(moveAtualY < TAMANHO - 1 && mapaMemoriaTraseiraRobo[moveAtualX][moveAtualY + 1]
-                && mapaMemoriaFrontalRobo[moveAtualX][moveAtualY + 1] == '1'){
-                proximoMoveY = moveAtualY + 1;
-                tentativaValida = 1;
-            }
-            // Tentar o movimento para baixo
-            else if (moveAtualX < TAMANHO - 1 && mapaMemoriaTraseiraRobo[moveAtualX + 1][moveAtualY] == 2
-                && mapaMemoriaFrontalRobo[moveAtualX + 1][moveAtualY] == '1'){
-                proximoMoveX = moveAtualX + 1;
-                tentativaValida = 1;
-            }
-    
+
+        // Prioridade 3: se não houver outra opção, voltar para a casa anterior
+        if (!tentativaValida && ultimaPosicaoRoboX >= 0 && ultimaPosicaoRoboY >= 0
+            && abs(moveAtualX - ultimaPosicaoRoboX) + abs(moveAtualY - ultimaPosicaoRoboY) == 1) {
+            proximoMoveX = ultimaPosicaoRoboX;
+            proximoMoveY = ultimaPosicaoRoboY;
+            tentativaValida = 1;
         }
     
 
@@ -200,6 +140,10 @@ int main(){
 
                 //Atualiza o conhecimento de terreno da Memória Frontal
                 mapaMemoriaFrontalRobo[moveAtualX][moveAtualY] = '0';
+
+                // Guarda a posição anterior para evitar voltar instantaneamente no próximo passo
+                ultimaPosicaoRoboX = moveAtualX;
+                ultimaPosicaoRoboY = moveAtualY;
 
                 // ainda a acresentar
                 if(mapaMemoriaFrontalRobo[proximoMoveX][proximoMoveY] == '.'){
@@ -232,7 +176,8 @@ int main(){
             break;
         }
 
-        rodada++; 
+        rodada++;
+        system("cls"); 
     }
     // Para exibir a mensagem final do jogo
     if(encontrouPremio){
@@ -241,10 +186,84 @@ int main(){
         printf("\nFIM DE JOGO!! O ROBO NAO CONSEGUIU O PREMIO!!");
         rodada--; //Para ajustar o contador para exibir 40 rodadas
     }
+    imprimirMemorias();
     //Chama a função de relatório da estatística de aprendizagem
     imprimirEstatisticas(rodada, colisoes);
 
     return 0;
+}
+
+//Função para carregar o mundo!
+int carregarMundo(char mundo[TAMANHO][TAMANHO]){
+    FILE *arquivo = fopen("mundo.txt", "r");
+
+    if (arquivo == NULL){
+        return 0;
+    }
+
+    for (int i = 0; i < TAMANHO; i++){
+        for (int j = 0; j < TAMANHO; j++){
+            if (fscanf(arquivo, " %c", &mundo[i][j]) != 1){
+                fclose(arquivo);
+                return 0;
+            }
+
+            if (mundo[i][j] != '_' && mundo[i][j] != '*'){
+                fclose(arquivo);
+                return 0;
+            }
+        }
+    }
+
+    fclose(arquivo);
+    return 1;
+}
+//Função para imprimir o mundo
+void imprimirMundo(char mundo[TAMANHO][TAMANHO], int roboX, int roboY){
+    printf("\n=== MAPA ===\n");
+    for(int i = 0; i < TAMANHO; i++){
+        for(int j = 0; j < TAMANHO; j++){
+            if(i == roboX && j == roboY){
+                printf("R");
+            } else {
+                printf("%c", mundo[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
+
+// Retorna a Linha atual do robô
+int getRoboPositionX() { return posicaoRoboX; }
+
+int getRoboPositionY() { return posicaoRoboY; }
+
+// Função para zerar a memória no início do jogo
+void inicializarMemoria(){
+    for(int i = 0; i < TAMANHO; i++){
+        for(int j = 0; j < TAMANHO; j++){
+            mapaMemoriaFrontalRobo[i][j] = '.'; // Não testado
+            mapaMemoriaTraseiraRobo[i][j] = 0; // Nenhuma casa visita
+        }
+    }printf("\n");
+}
+
+// Imprimindo a memória do robô LUZITA
+void imprimirMemorias(){
+    printf("\n === MEMORIA DE APRENDIZADO DO ROBO === \n");
+    for(int i = 0; i < TAMANHO; i++){
+        for(int j = 0; j < TAMANHO; j++){
+            if(i == posicaoRoboX && j == posicaoRoboY){
+                printf("R "); // A posição atual é prioridade na visualização
+            }else if(mapaMemoriaFrontalRobo[i][j] == '1'){
+                printf("1 "); // Se for barreira, irá exibir "1"
+            }else if(mapaMemoriaTraseiraRobo[i][j] == 2){
+                printf("2 "); // Se já passou, irá exibir a pegada "2"
+            }else{
+                printf("%c ", mapaMemoriaFrontalRobo[i][j]); // Exibe "0" ou "."
+            }
+        }
+    }printf("\n");
 }
 
 //Função de Estatísticas
@@ -279,39 +298,6 @@ void imprimirEstatisticas(int totalRodadas, int colisoes){
     printf("\n=======================================\n");
 }
 
-
-// Retorna a Linha atual do robô
-int getRoboPositionX() { return posicaoRoboX; }
-
-int getRoboPositionY() { return posicaoRoboY; }
-
-// Função para zerar a memória no início do jogo
-void inicializarMemoria(){
-    for(int i = 0; i < TAMANHO; i++){
-        for(int j = 0; j < TAMANHO; j++){
-            mapaMemoriaFrontalRobo[i][j] = '.'; // Não testado
-            mapaMemoriaTraseiraRobo[i][j] = 0; // Nenhuma casa visita
-        }
-    }printf("\n");
-}
-
-// Imprimindo a memória do robô LUZITA
-void imprimirMemorias(){
-    printf("\n === MEMORIA DE APRENDIZADO DO ROBO === \n");
-    for(int i = 0; i < TAMANHO; i++){
-        for(int j = 0; j < TAMANHO; j++){
-            if(i == posicaoRoboX && j == posicaoRoboY){
-                printf("R "); // A posição atual é prioridade na visualização
-            }else if(mapaMemoriaFrontalRobo[i][j] == '1'){
-                printf("1 "); // Se for barreira, irá exibir "1"
-            }else if(mapaMemoriaTraseiraRobo[i][j] == 2){
-                printf("2 "); // Se já passou, irá exibir a pegada "2"
-            }else{
-                printf("%c ", mapaMemoriaFrontalRobo[i][j]); // Exibe "0" ou "."
-            }
-        }
-    }printf("\n");
-}
 
 // Movimentação do robô para a posição informada
 int moveRobo(int moveX, int moveY){
