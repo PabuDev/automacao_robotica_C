@@ -10,6 +10,7 @@
   */
 
 #define TAMANHO 20
+#define ROBO_CHAR "🤖"
 
 // Variáveis globais para controle exclusivo pelas funções obrigatórias
 char mundo[TAMANHO][TAMANHO];
@@ -52,6 +53,7 @@ int main(){
     }
 
     inicializarMemoria();
+    SetConsoleOutputCP(CP_UTF8);
 
     printf(" === SIMULACAO DO ROBO === \n\n");
 
@@ -182,12 +184,12 @@ int main(){
     }
     // Para exibir a mensagem final do jogo
     if(encontrouPremio){
-        printf("\nPARABENS, O ROBO MILA ACANCOU O PREMIO!!!");
+        printf("\nPARABENS, A ROBO LUZITA %s ACANCOU O PREMIO!!!", ROBO_CHAR);
     }else {
-        printf("\nFIM DE JOGO!! O ROBO NAO CONSEGUIU O PREMIO!!");
+        printf("\nFIM DE JOGO!! A ROBO %s NAO CONSEGUIU O PREMIO!!", ROBO_CHAR);
         rodada--; //Para ajustar o contador para exibir 40 rodadas
     }
-    imprimirMemorias();
+    //imprimirMemorias();
     //Chama a função de relatório da estatística de aprendizagem
     imprimirEstatisticas(rodada, colisoes);
 
@@ -225,7 +227,7 @@ void imprimirMundo(char mundo[TAMANHO][TAMANHO], int roboX, int roboY){
     for(int i = 0; i < TAMANHO; i++){
         for(int j = 0; j < TAMANHO; j++){
             if(i == roboX && j == roboY){
-                printf("R");
+                printf("%s", ROBO_CHAR);
             } else {
                 printf("%c", mundo[i][j]);
             }
@@ -255,7 +257,7 @@ void imprimirMemorias(){
     for(int i = 0; i < TAMANHO; i++){
         for(int j = 0; j < TAMANHO; j++){
             if(i == posicaoRoboX && j == posicaoRoboY){
-                printf("R "); // A posição atual é prioridade na visualização
+                printf("%s ", ROBO_CHAR); // A posição atual é prioridade na visualização
             }else if(mapaMemoriaFrontalRobo[i][j] == '1'){
                 printf("1 "); // Se for barreira, irá exibir "1"
             }else if(mapaMemoriaTraseiraRobo[i][j] == 2){
