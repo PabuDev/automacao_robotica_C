@@ -166,7 +166,7 @@ int main(){
         printf("\n=================================================\n");
 
 
-        Sleep(1000); // Delay de 1 segundo para visualização da simulação
+        Sleep(2000); // Delay de 1 segundo para visualização da simulação
 
         // Verifica se o robô alcançou o prêmio na posição (0,0)
         if (getRoboPositionX() == 0 && getRoboPositionY() == 0){
