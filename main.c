@@ -169,11 +169,10 @@ int main(){
 
         // Exibe o estado visual da simulação 
         imprimirMundo(mundo, getRoboPositionX(), getRoboPositionY());
-        //imprimirMemoria();
         printf("\n=================================================\n");
 
 
-        Sleep(2000); // Delay de 1 segundo para visualização da simulação
+        Sleep(1500); // Delay de 1 segundo para visualização da simulação
 
         // Verifica se o robô alcançou o prêmio na posição (0,0)
         if (getRoboPositionX() == 0 && getRoboPositionY() == 0){
@@ -191,7 +190,7 @@ int main(){
         printf("\nFIM DE JOGO!! A ROBO %s NAO CONSEGUIU O PREMIO!!", ROBO_CHAR);
         rodada--; //Para ajustar o contador para exibir 80 rodadas
     }
-    //imprimirMemorias();
+    imprimirMemorias();
     //Chama a função de relatório da estatística de aprendizagem
     imprimirEstatisticas(rodada, colisoes);
 
@@ -201,7 +200,7 @@ int main(){
 //Função para carregar o mundo!
 int carregarMundo(char mundo[TAMANHO][TAMANHO]){
     FILE *arquivo = fopen("mundo.txt", "r");
-
+    mundo[0][0] = '$';
     if (arquivo == NULL){
         return 0;
     }
