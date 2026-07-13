@@ -17,7 +17,7 @@ char mundo[TAMANHO][TAMANHO];
 char mapaMemoriaFrontalRobo[TAMANHO][TAMANHO]; // "Memória" Frontal de LUZITA
 int mapaMemoriaTraseiraRobo[TAMANHO][TAMANHO]; //"Memória" Traseira de LUZITA
 int posicaoRoboX = 19, posicaoRoboY = 19; // Linha X, Coluna Y
-int ultimaPosicaoRoboX = -1, ultimaPosicaoRoboY = -1;
+int ultimaPosicaoRoboX = -1, ultimaPosicaoRoboY = -1; // Variáveis para armazenar as posições anteriores do robô
 
 // Protótipos das funções obrigatórias 
 
@@ -34,12 +34,7 @@ void inicializarMemoria();
 
 // Variável para mostrar se o robô se movimentou ou não
 void imprimirEstatisticas(int totalRodadas, int colisoes);
-//Variável para mostrar se o robô se movimentou ou não
-int movimentoFeito();
-//Colocar um provável if else na parte que for printar que ele conseguiu andar ou não.
-/*Nomear um novo int, ex: int mov = movimentoFeito(); pra poder se encaixar no valor da variável e 
-ir atualizando, por isso cria-se uma nova.
-*/
+
 
 
 int main(){
@@ -293,7 +288,7 @@ void imprimirEstatisticas(int totalRodadas, int colisoes){
     printf("\n=======================================");
     printf("\n       RELATORIO DE EFICIENCIA         ");
     printf("\n=======================================");
-    printf("\nTotal de rodadas gastas: %d de 40", totalRodadas);
+    printf("\nTotal de rodadas gastas: %d de 80", totalRodadas);
     printf("\nColisoes/Erros registrados: %d", colisoes);
     printf("\nCasas descobertas (Livres): %d", descobertas - barreiras);
     printf("\nObstaculos catalogados: %d", barreiras);
