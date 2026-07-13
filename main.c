@@ -52,6 +52,13 @@ int main(){
 
     printf(" === SIMULACAO DO ROBO === \n\n");
 
+
+    // teste 
+    imprimirMundo(mundo, getRoboPositionX(), getRoboPositionY());
+    printf("\n=================================================\n");
+    Sleep(2000);
+    system("cls");
+
     while(rodada <= 80){
 
         int moveAtualX = getRoboPositionX();
@@ -182,7 +189,7 @@ int main(){
         printf("\nPARABENS, A ROBO LUZITA %s ACANCOU O PREMIO!!!", ROBO_CHAR);
     }else {
         printf("\nFIM DE JOGO!! A ROBO %s NAO CONSEGUIU O PREMIO!!", ROBO_CHAR);
-        rodada--; //Para ajustar o contador para exibir 40 rodadas
+        rodada--; //Para ajustar o contador para exibir 80 rodadas
     }
     //imprimirMemorias();
     //Chama a função de relatório da estatística de aprendizagem
