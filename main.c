@@ -63,7 +63,8 @@ int main(){
 
     printf(" === SIMULACAO DO ROBO === \n\n");
 
-    // teste 
+
+    // imprime a primeira posição do robô antes dele se mover
     imprimirMundo(mundo, getRoboPositionX(), getRoboPositionY());
     printf("\n=================================================\n");
     Sleep(2000);
