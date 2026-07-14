@@ -3,11 +3,46 @@
 #include <windows.h>
 
 // Trabalho referente à terceira avaliação da matéria de Algoritmos.
-/*Estratégia utilizada: O robô Mila, ao se chocar com um obstáculo, "grava" essa informação em sua memória,
- evitando passar por aquele obstáculo novamente. Realizamos uma segunda matriz para armazenar o valor 
- nela, assim o robô vai "olhar" para ela e vai identificar se tem ou não obstáculo, evitando 
- repetir o erro novamente!
-  */
+/*
+ * ===================================================================
+ * ESTRATÉGIA DA ROBÔ LUZITA
+ * ===================================================================
+ * A robô Luzita vai andar pelo mapa usando duas "memórias" próprias representadas por duas matrizes,
+ * percorrendo as casa sem conhecê-las previamente.
+ *
+ *  - Memória Frontal (mapaMemoriaFrontalRobo): guarda o que a robô
+ *    já "encontrou" à sua frente em cada casa vizinha: '.' quando
+ *    ainda não foi testada, '0' quando sabe que é livre, e '1'
+ *    quando descobriu (por colisão) que ali existe um obstáculo.
+ *
+ *  - Memória Traseira (mapaMemoriaTraseiraRobo): guarda os lugares
+ *    que ela já passou, marcando com 2 os locais por onde ela já
+ *    passou, para evitar ficar circulando pelo mesmo caminho
+ *    repetidamente.
+ *
+ * A cada rodada, a Luzita decide seu próximo passo seguindo uma
+ * ordem de prioridades:
+ *
+ *  1ª) Explorar uma casa vizinha ainda desconhecida ('.'), desde que
+ *      não seja a casa de onde ela acabou de vir e não tenha sido
+ *      visitada antes (pegada = 2). Isso faz com que a Luzita sempre
+ *      prefira descobrir um território novo.
+ *
+ *  2ª) Se todas as vizinhas já forem conhecidas, a Luzita anda para
+ *      uma casa já conhecida como livre ('0'), evitando voltar
+ *      imediatamente por onde veio.
+ *
+ *  3ª) Se não houver nenhuma opção nova ou livre disponível (beco
+ *      sem saída), a Luzita volta para a última posição em que
+ *      estava, recuando até encontrar um novo caminho para explorar.
+ *
+ * Sempre que a Luzita tenta se mover e bate em um obstáculo, ela
+ * grava essa informação na Memória Frontal ('1'), garantindo que
+ * nunca mais tente esse mesmo movimento, assim, o aprendizado é
+ * cumulativo e os erros não se repetem ao longo da simulação e ela
+ * segue para encontrar o prêmio!
+ * ===================================================================
+ */
 
 #define TAMANHO 20
 #define ROBO_CHAR "🤖"
