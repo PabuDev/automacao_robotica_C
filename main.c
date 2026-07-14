@@ -2,33 +2,7 @@
 #include <stdlib.h>
 #include <windows.h>
 
-// Trabalho referente à terceira avaliação da matéria de Algoritmos.
-/*
- * ===================================================================
- * ESTRATÉGIA DA ROBÔ LUZITA
- * ===================================================================
- * A robô Luzita vai andar pelo mapa usando duas "memórias" próprias representadas por duas matrizes,
- * percorrendo as casa sem conhecê-las previamente.
- *
- *  - Memória Frontal (mapaMemoriaFrontalRobo): guarda o que a robô
- *    já "encontrou" à sua frente em cada casa vizinha: '.' quando
- *    ainda não foi testada, '0' quando sabe que é livre, e '1'
- *    quando descobriu (por colisão) que ali existe um obstáculo.
- *
- *  - Memória Traseira (mapaMemoriaTraseiraRobo): guarda os lugares
- *    que ela já passou, marcando com 2 os locais por onde ela já
- *    passou, para evitar ficar circulando pelo mesmo caminho
- *    repetidamente.
- *
- * A cada rodada, a Luzita decide seu próximo passo seguindo uma
- * ordem de prioridades:
- *
- *  1ª) Explorar uma casa vizinha ainda desconhecida ('.'), desde que
- *      não seja a casa de onde ela acabou de vir e não tenha sido
- *      visitada antes (pegada = 2). Isso faz com que a Luzita sempre
- *      prefira descobrir um território novo.
- *
- *  2ª) Se todas as vizinhas já forem conhecidas, a Luzita anda para
+ /*  2ª) Se todas as vizinhas já forem conhecidas, a Luzita anda para
  *      uma casa já conhecida como livre ('0'), evitando voltar
  *      imediatamente por onde veio.
  *
