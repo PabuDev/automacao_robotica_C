@@ -46,6 +46,7 @@
 
 #define TAMANHO 20
 #define ROBO_CHAR "🤖"
+#define PREMIO "🏆"
 
 // Variáveis globais para controle exclusivo pelas funções obrigatórias
 char mundo[TAMANHO][TAMANHO];
@@ -76,6 +77,16 @@ int main(){
     int rodada = 1;
     int encontrouPremio = 0;
     int colisoes = 0; //Contador para a estatística
+    char trofeu[7][10] = {
+    "   ___   ",
+    "  /___\\  ",
+    "  \\   /  ",
+    "   | |   ",
+    "   | |   ",
+    "  _|_|_  ",
+    " (_____) "
+};
+
 
     if (!carregarMundo(mundo)){
         printf("Falha ao carregar o mundo, tente novamente!\n");
@@ -220,11 +231,14 @@ int main(){
     }
     // Para exibir a mensagem final do jogo
     if(encontrouPremio){
-        printf("\nPARABENS, A ROBO LUZITA %s ACANCOU O PREMIO!!!", ROBO_CHAR);
+        printf("\nPARABENS, A ROBO LUZITA %s ACANCOU O PREMIO %s!!!", ROBO_CHAR, PREMIO);
     }else {
         printf("\nFIM DE JOGO!! A ROBO %s NAO CONSEGUIU O PREMIO!!", ROBO_CHAR);
-        rodada--; //Para ajustar o contador para exibir 80 rodadas
+        rodada--; //Para ajustar o contador para exibir 40 rodadas
     }
+    for (int i = 0; i < 7; i++) {
+    printf("%s\n", trofeu[i]);
+} //Imprimir Prêmio
     imprimirMemorias();
     //Chama a função de relatório da estatística de aprendizagem
     imprimirEstatisticas(rodada, colisoes);
@@ -235,7 +249,6 @@ int main(){
 //Função para carregar o mundo!
 int carregarMundo(char mundo[TAMANHO][TAMANHO]){
     FILE *arquivo = fopen("mundo.txt", "r");
-    mundo[0][0] = '$';
     if (arquivo == NULL){
         return 0;
     }
@@ -253,7 +266,7 @@ int carregarMundo(char mundo[TAMANHO][TAMANHO]){
             }
         }
     }
-
+    mundo[0][0] = '$';
     fclose(arquivo);
     return 1;
 }
